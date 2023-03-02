@@ -21,4 +21,5 @@ centos7: "{{ ansible_distribution == \"CentOS\" and ansible_distribution_major_v
 centos8: "{{ ansible_distribution == \"CentOS\" and ansible_distribution_major_version == \"8\" }}"
 rhel7: "{{ ansible_distribution == \"RedHat\" and ansible_distribution_major_version == \"7\" }}"
 rhel8: "{{ ansible_distribution == \"RedHat\" and ansible_distribution_major_version == \"8\" }}"
+rhel9: "{{ (ansible_distribution == \"RedHat\" or ansible_distribution == \"AlmaLinux\") and ansible_distribution_major_version == \"9\" }}"
 centos_rhel: "{{ ansible_distribution == \"RedHat\" or ansible_distribution == \"CentOS\" }}"
