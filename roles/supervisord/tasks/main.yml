@@ -8,6 +8,11 @@
   when: centos8 or rhel8
   tags: supervisord
 
+- name: installed supervisord
+  yum: name=supervisor state=present enablerepo=epel
+  when: rhel9
+  tags: supervisord
+
 - name: create the supervisord directory
   file: path={{ item }} state=directory owner=root group=root mode=0755
   with_items:
@@ -30,6 +35,7 @@
   template: src=movabletype.ini.j2 dest=/etc/supervisord.d/movabletype.ini force=no
   tags: supervisord
 
+# rhel9 has service file
 - name: Create systemd configuration file
   template:
     src: supervisord.service.j2
@@ -38,6 +44,7 @@
     owner: root
     group: root
     force: no
+  when: not rhel9
   tags: supervisord
 
 - name: Create movabletype run file

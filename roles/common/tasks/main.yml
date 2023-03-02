@@ -12,6 +12,11 @@
   tags: common
 
 - name: install the epel repositry
+  yum: name=epel-release state=present
+  when: rhel9
+  tags: common
+
+- name: install the epel repositry
   yum:
     name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
     state: present
@@ -85,6 +90,13 @@
 
 - name: install the latest libraries
   yum: name="{{ packages }}" state=present
+  when: not rhel9
+  tags: common
+
+# rhel9: rsync not installed
+- name: install rsync
+  yum: name=rsync state=present
+  when: rhel9
   tags: common
 
 - name: yum update
@@ -107,7 +119,7 @@
 
 - name: installed langpack
   yum: name="glibc-langpack-{{ locale_code }}" state=present
-  when: centos8 or rhel8
+  when: centos8 or rhel8 or rhel9
   tags: common
 
 - name: set locale
@@ -125,6 +137,11 @@
 - name: disable SELinux
   selinux: state=disabled
   when: centos_rhel
+  tags: common
+
+- name: disable SELinux
+  shell: "grubby --update-kernel ALL --args selinux=0"
+  when: rhel9
   tags: common
 
 - name: set path to ldconfig

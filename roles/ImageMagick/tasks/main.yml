@@ -23,6 +23,16 @@
       - ImageMagick
       - ImageMagick-devel
     state: present
+    enablerepo: epel
+  when: rhel9
+  tags: ImageMagick
+
+- name: ImageMagick is installed
+  yum:
+    name:
+      - ImageMagick
+      - ImageMagick-devel
+    state: present
     enablerepo: remi,epel,codeready-builder-for-rhel-8-rhui-rpms
   when: rhel8
   tags: ImageMagick
@@ -44,6 +54,11 @@
   tags: php
 
 - name: php imagick installed
+  yum: name=php-pecl-imagick state=present enablerepo=epel
+  when: rhel9 and php
+  tags: php
+
+- name: php imagick installed
   yum: name=php-imagick state=present enablerepo=epel,epel-modular,remi-safe,remi-modular,remi
   when: ( centos8 or rhel8 ) and php
   tags: php
@@ -58,7 +73,7 @@
   blockinfile:
     dest: /etc/ImageMagick-6/policy.xml
     block: "{{ policymap }}"
-  when: centos_rhel
+  when: centos_rhel or rhel9
   tags: ImageMagick
 
 - name: insert "Policymap" configuation block in /etc/ImageMagick/policy.xml

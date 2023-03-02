@@ -6,6 +6,26 @@
   command: mv /var/www/{{ mt.ver }} /var/www/movabletype creates=/var/www/movabletype/
   tags: movabletype
 
+- name: Install the mt-libs
+  synchronize:
+    src: "lib/{{ item }}"
+    dest: "/var/www/movabletype/lib/"
+    compress: no
+  with_items:
+    - "{{ mt.libs | default([]) }}"
+  when: mt.libs is defined
+  tags: mt-libs
+
+- name: Install the mt-tools
+  synchronize:
+    src: "tools/{{ item }}"
+    dest: "/var/www/movabletype/tools/"
+    compress: no
+  with_items:
+    - "{{ mt.tools | default([]) }}"
+  when: mt.tools is defined
+  tags: mt-tools
+
 - name: Install the mt-plugins
   synchronize: 
     src: "mt-plugins/{{ item }}"
@@ -18,12 +38,32 @@
 
 - name: Install the mt-static
   synchronize: 
-    src: "mt-static/{{ item }}" 
-    dest: "/var/www/movabletype/mt-static/plugins/"
+    src: "mt-static/{{ item }}"
+    dest: "/var/www/movabletype/mt-static/"
     compress: no
   with_items:
     - "{{ mt.static | default([]) }}"
   when: mt.static is defined
+  tags: mt-plugins
+
+- name: Change permission to mt-libs
+  file:
+    path: "/var/www/movabletype/lib"
+    owner: "{{ owner }}"
+    group: "{{ group.shared }}"
+    recurse: yes
+    mode: 0775
+  when: mt.libs is defined
+  tags: mt-plugins
+
+- name: Change permission to mt-tools
+  file:
+    path: "/var/www/movabletype/tools"
+    owner: "{{ owner }}"
+    group: "{{ group.shared }}"
+    recurse: yes
+    mode: 0775
+  when: mt.tools is defined
   tags: mt-plugins
 
 - name: Change permission to mt-plugins
@@ -32,7 +72,7 @@
     owner: "{{ owner }}"
     group: "{{ group.shared }}"
     recurse: yes
-    mode: 0755
+    mode: 0775
   when: mt.plugins is defined
   tags: mt-plugins
 
@@ -42,7 +82,7 @@
     owner: "{{ owner }}"
     group: "{{ group.shared }}"
     recurse: yes
-    mode: 0755
+    mode: 0775
   when: mt.static is defined
   tags: mt-plugins
 

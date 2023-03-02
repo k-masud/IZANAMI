@@ -1,3 +1,13 @@
+- name: Update mysql-community GPG KEY
+  shell: rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+  tags: mysqld
+  when: centos7 or rhel7 or amzn2 or rhel9
+
+- name: add mysql-repo for rhel9
+  yum: name="https://repo.mysql.com//mysql80-community-release-el9-1.noarch.rpm"
+  tags: mysqld
+  when: rhel9
+
 - name: add mysql-repo for centos8 
   yum: name="https://dev.mysql.com/get/mysql80-community-release-el8-1.noarch.rpm" 
   tags: mysqld
@@ -25,7 +35,7 @@
     state: present
     enablerepo: mysql80-community
   tags: mysqld
-  when: centos8 or rhel8
+  when: centos8 or rhel8 or rhel9
 
 - name: Install Mysql package
   yum:
@@ -41,7 +51,7 @@
       - python3-PyMySQL
     state: latest
     enablerepo: epel
-  when: centos8 or rhel8
+  when: centos8 or rhel8 or rhel9
   tags: mysqld
 
 - name: MySQL-Python installed

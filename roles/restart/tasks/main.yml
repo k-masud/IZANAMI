@@ -19,6 +19,6 @@
     name: php-fpm
     state: started
     enabled: yes
-  when: ((centos8 or rhel8 ) or nginx ) and php
+  when: ((centos8 or rhel8 or rhel9 ) or nginx ) and php
   tags: restart
 

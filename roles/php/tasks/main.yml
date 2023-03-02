@@ -10,6 +10,11 @@
   when: centos8 or rhel8
   tags: php
 
+- name: vars for rhel9
+  include_vars: rhel9.yml
+  when: rhel9
+  tags: php
+
 - name: vars for amazonlinux
   include_vars: amazonlinux.yml
   when: amzn2
@@ -45,6 +50,11 @@
   when: centos7 or rhel7
   tags: php
 
+- name: php installed
+  yum: name={{ php_package }} state=present enablerepo=epel
+  when: rhel9
+  tags: php
+
 - name: php-fpm installed
   yum: name=php-fpm enablerepo=remi-php74 state=present
   when: centos7 or rhel7
@@ -58,7 +68,7 @@
     line: "{{ item.line }}"
     backrefs: yes
   with_items: "{{ php_fpm }}"
-  when: (centos8 or rhel8 ) or nginx
+  when: (centos8 or rhel8 or rhel9) or nginx
   tags: php
 
 - name: phpini configured
