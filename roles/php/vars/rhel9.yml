@@ -1,0 +1,19 @@
+php_ini_path: /etc/php.ini
+php_fpm_path: /etc/php-fpm.d/www.conf
+php_package:
+   - php
+   - php-bcmath
+   - php-gd
+   - php-intl
+   - php-json
+   - php-mbstring
+   - php-memcache
+   - php-mysqlnd
+   - php-opcache
+   - php-pdo
+   - php-pecl-apcu
+   - php-pecl-xdebug
+   - php-tokenizer
+   - php-xml
+   - php-zip
+
