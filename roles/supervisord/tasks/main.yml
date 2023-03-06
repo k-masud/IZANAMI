@@ -31,6 +31,16 @@
   template: src=supervisord.conf.j2 dest=/etc/supervisord.conf force=no
   tags: supervisord
 
+- name: setup supervisord configuration file
+  replace: dest=/etc/supervisord.conf regexp="/var/log/supervisor/supervisord.log" replace="/var/log/supervisord.log"
+  when: rhel9
+  tags: supervisord
+
+- name: cleanup supervisord log directory
+  file: path=/var/log/supervisor state=absent
+  when: rhel9
+  tags: supervisord
+
 - name: Create movabletype configuration file
   template: src=movabletype.ini.j2 dest=/etc/supervisord.d/movabletype.ini force=no
   tags: supervisord
